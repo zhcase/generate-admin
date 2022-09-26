@@ -31,9 +31,11 @@ class HomeController extends Controller {
       const token = app.jwt.sign(
         {
           username,
-          userId:userInfo.userId, //需要存储的 token 数据
+          userId:userInfo.user_id, //需要存储的 token 数据
         },
-        app.config.jwt.secret
+        app.config.jwt.secret,{
+          expiresIn: `24h`,
+        }
       );
       app.redis.set(token, Date.now(),'EX',24*60*60)
       ctx.body = stateCapture("success", {token:token}, "登录成功!");
